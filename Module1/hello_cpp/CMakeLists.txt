@@ -1,0 +1,63 @@
+cmake_minimum_required(VERSION 3.20)
+project(RandomWordProject)
+
+# 设置C++标准
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 创建库
+add_library(RandomWordLib
+    RandomWordSelector.cpp
+    RandomWordSelector.h
+)
+
+# 创建主程序
+add_executable(RandomWorld
+    RandomWorld.cpp
+)
+
+target_link_libraries(RandomWorld RandomWordLib)
+
+# 创建简单测试可执行文件
+add_executable(SimpleTests
+    test/simple_test.cpp
+)
+
+target_link_libraries(SimpleTests RandomWordLib)
+
+# Google Test版本（如果网络可用）
+# 取消注释下面的代码来使用Google Test
+# include(FetchContent)
+# FetchContent_Declare(
+#     googletest
+#     GIT_REPOSITORY https://github.com/google/googletest.git
+#     GIT_TAG release-1.12.1
+# )
+# set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+# FetchContent_MakeAvailable(googletest)
+# 
+# add_executable(GoogleTests
+#     test/test_random_word.cpp
+# )
+# 
+# target_link_libraries(GoogleTests 
+#     RandomWordLib 
+#     gtest 
+#     gtest_main
+# )
+
+# 添加编译选项
+if(MSVC)
+    target_compile_options(RandomWordLib PRIVATE /W4)
+    target_compile_options(RandomWorld PRIVATE /W4)
+    target_compile_options(SimpleTests PRIVATE /W4)
+else()
+    # PRIVATE编译选项: 只应用于当前目标
+    # -Wall: 启用所有警告
+    # -Wextra: 启用额外警告
+    # -Wpedantic: 启用严格的标准遵循
+
+    target_compile_options(RandomWordLib PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(RandomWorld PRIVATE -Wall -Wextra -Wpedantic)
+    target_compile_options(SimpleTests PRIVATE -Wall -Wextra -Wpedantic)
+endif()
